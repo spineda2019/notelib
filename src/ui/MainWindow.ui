@@ -18,6 +18,9 @@
    <layout class="QGridLayout" name="gridLayout" columnstretch="1,4">
     <item row="0" column="1">
      <widget class="QLabel" name="label">
+      <property name="styleSheet">
+       <string notr="true">font-weight: bold;</string>
+      </property>
       <property name="text">
        <string>Current Notebook:</string>
       </property>
@@ -67,6 +70,9 @@
     </item>
     <item row="1" column="1">
      <widget class="QLabel" name="label_2">
+      <property name="styleSheet">
+       <string notr="true">font-style: italic;</string>
+      </property>
       <property name="text">
        <string>Current Page:</string>
       </property>

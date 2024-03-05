@@ -17,6 +17,9 @@ public:
   MainWindow(QMainWindow *parent = nullptr);
   ~MainWindow();
 
+private slots:
+  void OpenNewPage();
+
 private:
   Ui::MainWindow *ui;
 };

@@ -2,3 +2,5 @@ build/
 .cache/
 .vs/
 src/include/ui*
+installer/packages/com.spineda.x64installer/data/*
+!installer/packages/com.spineda.x64installer/data/README.md

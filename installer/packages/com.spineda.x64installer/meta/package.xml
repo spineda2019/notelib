@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package>
+	<DisplayName>64 Bit Notebook Library</DisplayName>
+	<Description>
+		This will install the 64 bit version of the Notebook Library
+		Application on your machine
+	</Description>
+	<Version>0.0.1</Version>
+	<ReleaseDate>2024-03-06</ReleaseDate>
+	<Licenses>
+		<License name="App License" file="license.txt" />
+	</Licenses>
+	<Default>true</Default>
+</Package>

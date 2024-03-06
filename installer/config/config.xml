@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Installer>
+	<Name>Notebook Library</Name>
+	<Version>0.0.1</Version>
+	<Title>Notebook Library Installer</Title>
+	<Publisher>spineda@wpi.edu</Publisher>
+	<TargetDir>C:\Program Files\NotebookLibrary</TargetDir>
+</Installer>

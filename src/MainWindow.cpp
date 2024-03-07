@@ -16,9 +16,15 @@ MainWindow::MainWindow(QMainWindow *parent)
 
   connect(this->ui->open_new_page_button_, &QPushButton::clicked, this,
           &MainWindow::OpenNewPage);
+  connect(this->ui->text_display_edit_, &QPlainTextEdit::textChanged, this,
+          &MainWindow::IndicateFileHasBeenChanged);
 }
 
 MainWindow::~MainWindow() { delete this->ui; }
+
+void MainWindow::IndicateFileHasBeenChanged() {
+  this->ui->save_page_button_->setStyleSheet("background-color: #f1eb9c;");
+}
 
 void MainWindow::OpenNewPage() {
   std::scoped_lock file_lock(this->open_file_lock_);
@@ -54,4 +60,6 @@ void MainWindow::OpenNewPage() {
     this->ui->text_display_edit_->insertPlainText(
         QString::fromStdString(cached_text));
   }
+
+  this->ui->save_page_button_->setStyleSheet("background-color: #90ee90;");
 }

@@ -21,6 +21,7 @@ public:
 
 private slots:
   void OpenNewPage();
+  void IndicateFileHasBeenChanged();
 
 private:
   Ui::MainWindow *ui;

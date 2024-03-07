@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <qtconfigmacros.h>
+#include <qtmetamacros.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

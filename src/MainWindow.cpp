@@ -14,7 +14,7 @@ MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow()), open_file_lock_{} {
   this->ui->setupUi(this);
 
-  connect(this->ui->open_new_page_button_, &QPushButton::pressed, this,
+  connect(this->ui->open_new_page_button_, &QPushButton::clicked, this,
           &MainWindow::OpenNewPage);
 }
 

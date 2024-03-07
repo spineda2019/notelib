@@ -2,6 +2,7 @@
 #define NOTELIB_SRC_INCLUDE_MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <mutex>
 #include <qtconfigmacros.h>
 #include <qtmetamacros.h>
 
@@ -23,6 +24,7 @@ private slots:
 
 private:
   Ui::MainWindow *ui;
+  std::mutex open_file_lock_;
 };
 
 #endif // NOTELIB_SRC_INCLUDE_MAINWINDOW_HPP

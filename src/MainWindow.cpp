@@ -3,13 +3,14 @@
 
 #include <cstdint>
 #include <fstream>
+#include <mutex>
 #include <qfiledialog.h>
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 MainWindow::MainWindow(QMainWindow *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow()) {
+    : QMainWindow(parent), ui(new Ui::MainWindow()), open_file_lock_{} {
   this->ui->setupUi(this);
 
   connect(this->ui->open_new_page_button_, &QPushButton::pressed, this,
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 MainWindow::~MainWindow() { delete this->ui; }
 
 void MainWindow::OpenNewPage() {
+  std::scoped_lock file_lock(this->open_file_lock_);
   QString selected_file(QFileDialog::getOpenFileName(this, tr("Select File")));
 
   if (selected_file.isEmpty()) {

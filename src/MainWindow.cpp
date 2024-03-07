@@ -5,6 +5,7 @@
 #include <fstream>
 #include <mutex>
 #include <qfiledialog.h>
+#include <qfileinfo.h>
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qwidget.h>
@@ -26,6 +27,12 @@ void MainWindow::OpenNewPage() {
   if (selected_file.isEmpty()) {
     return;
   }
+
+  QFileInfo file_info(selected_file);
+  this->ui->current_page_label_->setText("Current Page: " +
+                                         file_info.fileName());
+  this->ui->current_notebook_label_->setText("Current Notebook: " +
+                                             file_info.absolutePath());
 
   std::ifstream selected_file_stream(selected_file.toStdString());
   constexpr std::uint16_t max_cache_size(2048);

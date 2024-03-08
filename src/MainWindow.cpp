@@ -15,10 +15,11 @@
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow()), open_file_lock_{},
-      number_of_lines_(1), current_file_name{} {
+      number_of_lines_(1), current_file_name{},
+      current_state_(DocumentState::DoesNotExist) {
   this->ui->setupUi(this);
 
-  connect(this->ui->open_new_page_button_, &QPushButton::clicked, this,
+  connect(this->ui->open_existing_page_button_, &QPushButton::clicked, this,
           &MainWindow::OpenNewPage);
   connect(this->ui->text_display_edit_, &QPlainTextEdit::textChanged, this,
           &MainWindow::IndicateFileHasBeenChanged);
@@ -56,11 +57,12 @@ void MainWindow::IndicateFileHasBeenChanged() {
 
 void MainWindow::OpenNewPage() {
   std::scoped_lock file_lock(this->open_file_lock_);
-  this->ui->open_new_page_button_->setStyleSheet("background-color: #ff7f7f;");
+  this->ui->open_existing_page_button_->setStyleSheet(
+      "background-color: #ff7f7f;");
   QString selected_file(QFileDialog::getOpenFileName(this, tr("Select File")));
 
   if (selected_file.isEmpty()) {
-    this->ui->open_new_page_button_->setStyleSheet(
+    this->ui->open_existing_page_button_->setStyleSheet(
         "background-color: #90ee90;");
     return;
   }
@@ -99,7 +101,8 @@ void MainWindow::OpenNewPage() {
   }
 
   this->ui->save_page_button_->setStyleSheet("background-color: #90ee90;");
-  this->ui->open_new_page_button_->setStyleSheet("background-color: #90ee90;");
+  this->ui->open_existing_page_button_->setStyleSheet(
+      "background-color: #90ee90;");
 
   QPointer<QTextDocument> current_document(
       this->ui->text_display_edit_->document());

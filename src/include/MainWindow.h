@@ -2,9 +2,17 @@
 #define NOTELIB_SRC_INCLUDE_MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <cstdint>
 #include <mutex>
 #include <qtconfigmacros.h>
 #include <qtmetamacros.h>
+
+namespace {
+enum class DocumentState : std::uint8_t {
+  DoesNotExist,
+  Exists,
+};
+}
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,6 +37,7 @@ private:
   std::mutex open_file_lock_;
   std::string current_file_name;
   std::size_t number_of_lines_;
+  enum class DocumentState current_state_;
 };
 
 #endif // NOTELIB_SRC_INCLUDE_MAINWINDOW_HPP

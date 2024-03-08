@@ -21,11 +21,13 @@ public:
 
 private slots:
   void OpenNewPage();
+  void SaveCurrentPage();
   void IndicateFileHasBeenChanged();
 
 private:
   Ui::MainWindow *ui;
   std::mutex open_file_lock_;
+  std::size_t number_of_lines_;
 };
 
 #endif // NOTELIB_SRC_INCLUDE_MAINWINDOW_HPP

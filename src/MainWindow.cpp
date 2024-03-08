@@ -6,21 +6,39 @@
 #include <mutex>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
+#include <qpointer.h>
 #include <qpushbutton.h>
 #include <qstring.h>
+#include <qtextcursor.h>
 #include <qwidget.h>
 
 MainWindow::MainWindow(QMainWindow *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow()), open_file_lock_{} {
+    : QMainWindow(parent), ui(new Ui::MainWindow()), open_file_lock_{},
+      number_of_lines_(1) {
   this->ui->setupUi(this);
 
   connect(this->ui->open_new_page_button_, &QPushButton::clicked, this,
           &MainWindow::OpenNewPage);
   connect(this->ui->text_display_edit_, &QPlainTextEdit::textChanged, this,
           &MainWindow::IndicateFileHasBeenChanged);
+  connect(this->ui->save_page_button_, &QPushButton::clicked, this,
+          &MainWindow::SaveCurrentPage);
 }
 
 MainWindow::~MainWindow() { delete this->ui; }
+
+void MainWindow::SaveCurrentPage() {
+  this->ui->save_page_button_->setStyleSheet("background-color: #ff7f7f;");
+  //
+  // TODO(sep) iterate through text, but I don't want to cache the whole file
+  QPointer<QTextDocument> current_document(
+      this->ui->text_display_edit_->document());
+  QTextCursor document_cursor(current_document);
+  document_cursor.setPosition(QTextCursor::Start);
+  this->ui->text_display_edit_->setTextCursor(document_cursor);
+
+  this->ui->save_page_button_->setStyleSheet("background-color: #90ee90;");
+}
 
 void MainWindow::IndicateFileHasBeenChanged() {
   this->ui->save_page_button_->setStyleSheet("background-color: #f1eb9c;");
@@ -49,17 +67,26 @@ void MainWindow::OpenNewPage() {
   this->ui->text_display_edit_->clear();
   while (selected_file_stream.get(current_character)) {
     cached_text.push_back(current_character);
+    if (current_character == '\n') {
+      this->number_of_lines_++;
+    }
     if (cached_text.length() >= max_cache_size) {
-      this->ui->text_display_edit_->insertPlainText(
+      this->ui->text_display_edit_->appendPlainText(
           QString::fromStdString(cached_text));
       cached_text.clear();
     }
   }
   if (!cached_text.empty()) {
 
-    this->ui->text_display_edit_->insertPlainText(
+    this->ui->text_display_edit_->appendPlainText(
         QString::fromStdString(cached_text));
   }
 
   this->ui->save_page_button_->setStyleSheet("background-color: #90ee90;");
+
+  QPointer<QTextDocument> current_document(
+      this->ui->text_display_edit_->document());
+  QTextCursor document_cursor(current_document);
+  document_cursor.setPosition(QTextCursor::Start);
+  this->ui->text_display_edit_->setTextCursor(document_cursor);
 }

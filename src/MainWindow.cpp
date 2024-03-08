@@ -30,8 +30,6 @@ MainWindow::~MainWindow() { delete this->ui; }
 
 void MainWindow::SaveCurrentPage() {
   this->ui->save_page_button_->setStyleSheet("background-color: #ff7f7f;");
-  //
-  // TODO(sep) iterate through text, but I don't want to cache the whole file
   QPointer<QTextDocument> current_document(
       this->ui->text_display_edit_->document());
   QTextCursor document_cursor(current_document);
@@ -58,9 +56,12 @@ void MainWindow::IndicateFileHasBeenChanged() {
 
 void MainWindow::OpenNewPage() {
   std::scoped_lock file_lock(this->open_file_lock_);
+  this->ui->open_new_page_button_->setStyleSheet("background-color: #ff7f7f;");
   QString selected_file(QFileDialog::getOpenFileName(this, tr("Select File")));
 
   if (selected_file.isEmpty()) {
+    this->ui->open_new_page_button_->setStyleSheet(
+        "background-color: #90ee90;");
     return;
   }
 
@@ -98,6 +99,7 @@ void MainWindow::OpenNewPage() {
   }
 
   this->ui->save_page_button_->setStyleSheet("background-color: #90ee90;");
+  this->ui->open_new_page_button_->setStyleSheet("background-color: #90ee90;");
 
   QPointer<QTextDocument> current_document(
       this->ui->text_display_edit_->document());

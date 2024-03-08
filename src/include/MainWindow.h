@@ -27,6 +27,7 @@ private slots:
 private:
   Ui::MainWindow *ui;
   std::mutex open_file_lock_;
+  std::string current_file_name;
   std::size_t number_of_lines_;
 };
 

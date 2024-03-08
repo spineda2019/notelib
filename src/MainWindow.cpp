@@ -1,6 +1,7 @@
 #include "include/MainWindow.h"
 #include "include/ui_MainWindow.h"
 
+#include <QTextBlock>
 #include <cstdint>
 #include <fstream>
 #include <mutex>
@@ -14,7 +15,7 @@
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow()), open_file_lock_{},
-      number_of_lines_(1) {
+      number_of_lines_(1), current_file_name{} {
   this->ui->setupUi(this);
 
   connect(this->ui->open_new_page_button_, &QPushButton::clicked, this,
@@ -34,8 +35,19 @@ void MainWindow::SaveCurrentPage() {
   QPointer<QTextDocument> current_document(
       this->ui->text_display_edit_->document());
   QTextCursor document_cursor(current_document);
-  document_cursor.setPosition(QTextCursor::Start);
+  document_cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
   this->ui->text_display_edit_->setTextCursor(document_cursor);
+  std::ofstream output_file(this->current_file_name);
+  while (!document_cursor.atEnd()) {
+    document_cursor.movePosition(QTextCursor::EndOfLine,
+                                 QTextCursor::MoveAnchor);
+    output_file << document_cursor.block().text().toStdString();
+    document_cursor.movePosition(QTextCursor::NextBlock,
+                                 QTextCursor::MoveAnchor);
+    if (!document_cursor.atEnd()) {
+      output_file << "\n";
+    }
+  }
 
   this->ui->save_page_button_->setStyleSheet("background-color: #90ee90;");
 }
@@ -57,6 +69,9 @@ void MainWindow::OpenNewPage() {
                                          file_info.fileName());
   this->ui->current_notebook_label_->setText("Current Notebook: " +
                                              file_info.absolutePath());
+
+  this->current_file_name =
+      std::move(file_info.canonicalFilePath().toStdString());
 
   std::ifstream selected_file_stream(selected_file.toStdString());
   constexpr std::uint16_t max_cache_size(2048);
@@ -87,6 +102,6 @@ void MainWindow::OpenNewPage() {
   QPointer<QTextDocument> current_document(
       this->ui->text_display_edit_->document());
   QTextCursor document_cursor(current_document);
-  document_cursor.setPosition(QTextCursor::Start);
+  document_cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
   this->ui->text_display_edit_->setTextCursor(document_cursor);
 }

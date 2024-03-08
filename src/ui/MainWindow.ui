@@ -50,19 +50,19 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QPushButton" name="open_new_notebook_button_">
+         <widget class="QPushButton" name="open_existing_notebook_button_">
           <property name="text">
-           <string>Open New Notebook</string>
+           <string>Open Existing Notebook</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="open_new_page_button_">
+         <widget class="QPushButton" name="open_existing_page_button_">
           <property name="styleSheet">
            <string notr="true">background-color: rgb(144, 238, 144);</string>
           </property>
           <property name="text">
-           <string>Open New Page</string>
+           <string>Open Existing Page</string>
           </property>
          </widget>
         </item>

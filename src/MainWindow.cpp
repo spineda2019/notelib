@@ -30,6 +30,23 @@ MainWindow::MainWindow(QMainWindow *parent)
 MainWindow::~MainWindow() { delete this->ui; }
 
 void MainWindow::SaveCurrentPage() {
+  if (this->current_state_ == DocumentState::DoesNotExist) {
+    // request file destination
+    QString selected_file(QFileDialog::getSaveFileName(this, tr("Save File")));
+
+    if (selected_file.isEmpty()) {
+      return;
+    }
+
+    QFileInfo file_info(selected_file);
+    this->ui->current_page_label_->setText("Current Page: " +
+                                           file_info.fileName());
+    this->ui->current_notebook_label_->setText("Current Notebook: " +
+                                               file_info.absolutePath());
+    this->current_file_name = file_info.fileName().toStdString();
+    this->current_state_ = DocumentState::Exists;
+  }
+
   this->ui->save_page_button_->setStyleSheet("background-color: #ff7f7f;");
   QPointer<QTextDocument> current_document(
       this->ui->text_display_edit_->document());
@@ -67,6 +84,7 @@ void MainWindow::OpenNewPage() {
     return;
   }
 
+  this->current_state_ = DocumentState::Exists;
   QFileInfo file_info(selected_file);
   this->ui->current_page_label_->setText("Current Page: " +
                                          file_info.fileName());
